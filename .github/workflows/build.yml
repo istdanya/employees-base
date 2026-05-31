@@ -1,0 +1,37 @@
+name: Build Windows EXE
+
+on:
+  push:
+
+jobs:
+  build:
+
+    runs-on: windows-latest
+
+    steps:
+
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install packages
+        run: |
+          pip install pyinstaller
+          pip install pyqt5
+          pip install pandas
+          pip install qrcode
+          pip install opencv-python
+          pip install pyzbar
+          pip install openpyxl
+
+      - name: Build exe
+        run: |
+          pyinstaller --onefile --windowed new_kod_search.py
+
+      - name: Upload EXE
+        uses: actions/upload-artifact@v4
+        with:
+          name: employees-exe
+          path: dist/*.exe
